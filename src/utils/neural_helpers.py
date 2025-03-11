@@ -10,7 +10,7 @@ class Runnable:
         pass
 
 
-class Plot2D:
+class Plot2DBoundary:
     @abstractmethod
     def predict(self, X: np.ndarray):
         pass

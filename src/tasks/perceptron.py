@@ -1,10 +1,12 @@
 import numpy as np
+from numpy import ndarray
+
 from src.utils.data_loader import generate_perceptron_data
-from src.utils.neural_helpers import Plot2D, Runnable
+from src.utils.neural_helpers import Plot2DBoundary, Runnable
 from src.utils.visualization import plot_2d_decision_boundary, animate_learning
 
 
-class Perceptron(Plot2D, Runnable):
+class Perceptron(Plot2DBoundary, Runnable):
     """Simple Perceptron for binary classification."""
 
     def __init__(self, lr: float = 0.01, epochs: int = 1000):
@@ -15,8 +17,8 @@ class Perceptron(Plot2D, Runnable):
         """
         self.lr = lr
         self.epochs = epochs
-        self.weights: np.ndarray = None
-        self.bias: float = None
+        self.weights: np.ndarray = ndarray([])
+        self.bias: float = 0
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> list[int]:
         """Train perceptron using input data X and labels y."""
@@ -52,5 +54,5 @@ class Perceptron(Plot2D, Runnable):
         animate_learning(errors, title="Error Reduction Over Time")
 
         plot_2d_decision_boundary(model, X, y)
-        
+
         print(f"Weights: {model.weights}, Bias: {model.bias}")

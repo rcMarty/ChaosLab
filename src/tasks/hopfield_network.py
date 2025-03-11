@@ -1,12 +1,10 @@
-from abc import ABC
-
 import numpy as np
 
 from src.utils.math_helpers import step_function
-from src.utils.neural_helpers import Runnable, Plot2D
+from src.utils.neural_helpers import Runnable
 
 
-class HopfieldNetwork(Plot2D, Runnable, ABC):
+class HopfieldNetwork(Runnable):
     """
     Hopfield Network for pattern storage and recall.
     """

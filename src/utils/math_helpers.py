@@ -3,8 +3,14 @@ import numbers
 import numpy as np
 
 
-def sigmoid(x: numbers):
+def sigmoid(x: numbers) -> numbers:
+    """Sigmoid activation function."""
     return 1 / (1 + np.exp(-x))
+
+
+def sigmoid_derivative(x: numbers) -> numbers:
+    """Derivative of sigmoid function"""
+    return x * (1 - x)
 
 
 def relu(x: numbers):
