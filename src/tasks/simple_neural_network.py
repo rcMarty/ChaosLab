@@ -85,4 +85,7 @@ class MLP(Plot2DBoundary, Runnable):
         print(f"W1: {model.W1},\n b1: {model.b1}")
         print(f"W2: {model.W2},\n b2: {model.b2}")
         print("Predictions:")
+        # Výpis predikcí
         print(model.predict(X))
+        # výpis chyby
+        print("Error:", errors[-1])
