@@ -1,12 +1,27 @@
+import numbers
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
 from src.utils.neural_helpers import Plot2DBoundary
 
+path = "results/"
 
-def visualize_data(X: np.ndarray, y: np.ndarray = None, figsize: tuple[int, int] = (6, 6), title: str = "2D Data", labels: tuple = ("X1", "X2"), show: bool = True) -> Figure | None:
+
+def save_plot(fig: Figure, filename: str) -> None:
+    """
+    Saves the figure to a file.
+
+    :param fig: plt.figure - figure to save
+    :param filename: str - name of the file
+    """
+    fig.savefig(f"{path}{filename}")
+
+
+def visualize_data(X: np.ndarray, y: np.ndarray = None, figsize: tuple[int, int] = (6, 6), title: str = "2D Data", labels: tuple = ("X1", "X2"), show: bool = True) -> tuple[Figure, Axes] | None:
     """
         Universal function for visualizing point data (2D datasets).
 
@@ -34,7 +49,7 @@ def visualize_data(X: np.ndarray, y: np.ndarray = None, figsize: tuple[int, int]
     if show:
         plt.show()
     else:
-        return fig
+        return fig, ax
 
 
 def visualize_grid(grid: np.ndarray, figsize: tuple[int, int] = (6, 6), title: str = "Grid") -> None:
@@ -52,7 +67,7 @@ def visualize_grid(grid: np.ndarray, figsize: tuple[int, int] = (6, 6), title: s
     plt.show()
 
 
-def plot_2d_decision_boundary(model: Plot2DBoundary, X: np.ndarray, y: np.ndarray, title: str = "Decision Boundary") -> None:
+def plot_2d_decision_boundary(model: Plot2DBoundary, X: np.ndarray, y: np.ndarray, title: str = "Decision Boundary", save: bool = False) -> None:
     """
     Plots the decision boundary for a 2D dataset (e.g., perceptron, XOR network).
 
@@ -60,6 +75,7 @@ def plot_2d_decision_boundary(model: Plot2DBoundary, X: np.ndarray, y: np.ndarra
     :param X: numpy array, shape (n_samples, 2) - data
     :param y: numpy array, shape (n_samples,) - classes
     :param title: str - title of the graph
+    :param save: if True, saves the plot to a file
     """
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
@@ -72,6 +88,8 @@ def plot_2d_decision_boundary(model: Plot2DBoundary, X: np.ndarray, y: np.ndarra
     plt.contourf(xx, yy, Z, alpha=0.3)
     plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors="k")
     plt.title(title)
+    if save:
+        plt.savefig(f"{path}{title}.png")
     plt.show()
 
 
@@ -105,12 +123,13 @@ def plot_fractal(x: np.ndarray, y: np.ndarray, title: str = "Fractal"):
     plt.show()
 
 
-def animate_learning(error_history: list[int], title: str = "Error Reduction Over Time") -> None:
+def animate_learning(error_history: list[numbers], title: str = "Error Reduction Over Time", animate_time: float = 1) -> None:
     """
     Animates the training error over time.
 
     :param error_history: List of errors at each epoch
     :param title: Graph title
+    :param animate_time: Time between frames
     """
     fig, ax = plt.subplots()
     ax.set_xlim(0, len(error_history))
@@ -121,7 +140,7 @@ def animate_learning(error_history: list[int], title: str = "Error Reduction Ove
         line.set_data(range(frame), error_history[:frame])
         return line,
 
-    _ = animation.FuncAnimation(fig, update, frames=len(error_history), interval=50)
+    _ = animation.FuncAnimation(fig, update, frames=len(error_history), interval=animate_time, blit=True)
     plt.title(title)
     plt.xlabel("Epoch")
     plt.ylabel("Error Count")

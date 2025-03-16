@@ -3,13 +3,15 @@ import numpy as np
 
 def generate_perceptron_data(n: int = 100) -> tuple[np.ndarray, np.ndarray]:
     """
-    Generates dataset for perceptron training.
+    Generates dataset for perceptron classification based on the line y = 3x + 2.
+
     :param n: Number of points
-    :return: Tuple of X (features) and y (labels)
+    :return: Tuple (X, y) where X are inputs and y are labels. 1 if above, -1 if below
     """
-    X = np.random.uniform(-5, 5, (n, 2))  # Random points in range (-5,5)
-    y = (X[:, 1] > (3 * X[:, 0] + 2)).astype(int)  # 1 if above, 0 if below
-    return X, y
+    X = np.random.uniform(-5, 5, (n, 2))
+    y_labels = np.where(X[:, 1] > (3 * X[:, 0] + 2), 1, -1)
+
+    return X, y_labels
 
 
 def generate_xor_data() -> tuple[np.ndarray, np.ndarray]:

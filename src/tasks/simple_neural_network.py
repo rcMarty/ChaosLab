@@ -4,7 +4,7 @@ from numpy import ndarray
 from src.utils.data_loader import generate_xor_data
 from src.utils.math_helpers import sigmoid, sigmoid_derivative
 from src.utils.neural_helpers import Plot2DBoundary, Runnable
-from src.utils.visualization import animate_learning, plot_2d_decision_boundary
+from src.utils.visualization import animate_learning, plot_2d_decision_boundary, visualize_data
 
 
 class MLP(Plot2DBoundary, Runnable):
@@ -77,14 +77,12 @@ class MLP(Plot2DBoundary, Runnable):
         model = MLP(input_size=2, hidden_size=4, output_size=1, lr=0.1)
         errors = model.train(X, y)
 
-        # Vykreslení chyby
-        animate_learning(errors, title="Error Reduction Over Time")
+        animate_learning(errors, title="Error Reduction Over Time", animate_time=0.00000001)  # Vykreslení chyby
 
-        # Vykreslení rozhodovací hranice
-        plot_2d_decision_boundary(model, X, y)
+        plot_2d_decision_boundary(model, X, y, "XOR problem boundary", True)  # Vykreslení rozhodovací hranice
 
         # Výpis vah
-        print(f"W1: {model.W1}, b1: {model.b1}")
-        print(f"W2: {model.W2}, b2: {model.b2}")
+        print(f"W1: {model.W1},\n b1: {model.b1}")
+        print(f"W2: {model.W2},\n b2: {model.b2}")
         print("Predictions:")
         print(model.predict(X))
