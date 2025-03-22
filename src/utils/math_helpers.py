@@ -17,8 +17,9 @@ def relu(x: numbers):
     return np.maximum(0, x)
 
 
-def step_function(x: numbers):
-    return np.where(x >= 0, 1, -1)
+def step_function(x: numbers) -> int:
+    """Binary step function returning -1 or 1."""
+    return 1 if x >= 0 else -1
 
 
 def normalize(data: np.ndarray, range_min: numbers = 0, range_max: numbers = 1):

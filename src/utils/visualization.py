@@ -52,19 +52,23 @@ def visualize_data(X: np.ndarray, y: np.ndarray = None, figsize: tuple[int, int]
         return fig, ax
 
 
-def visualize_grid(grid: np.ndarray, figsize: tuple[int, int] = (6, 6), title: str = "Grid") -> None:
+def visualize_grid(grid: np.ndarray, figsize: tuple[int, int] = (6, 6), title: str = "Grid", save: bool = False) -> None:
     """
     Plots a matrix (e.g., Cellular Automata, Q-learning map).
 
     :param figsize: tuple(int,int) - size of the graph
     :param grid: numpy array, shape (m, n) - grid for visualization
     :param title: str - title of the graph
+    :param save: bool - if True, saves the plot to a file
     """
-    plt.figure(figsize=figsize)
+    fig = plt.figure(figsize=figsize)
     plt.imshow(grid, cmap="coolwarm", interpolation="nearest")
     plt.colorbar()
     plt.title(title)
+    if save:
+        save_plot(fig, title)
     plt.show()
+    plt.close()
 
 
 def plot_2d_decision_boundary(model: Plot2DBoundary, X: np.ndarray, y: np.ndarray, title: str = "Decision Boundary", save: bool = False) -> None:
@@ -133,7 +137,7 @@ def animate_learning(error_history: list[numbers], title: str = "Error Reduction
     """
     fig, ax = plt.subplots()
     ax.set_xlim(0, len(error_history))
-    ax.set_ylim(0, max(error_history) + 1)
+    ax.set_ylim(min(error_history), max(error_history) + 1)
     line, = ax.plot([], [], lw=2)
 
     def update(frame: int) -> tuple[plt.Line2D]:
@@ -144,4 +148,24 @@ def animate_learning(error_history: list[numbers], title: str = "Error Reduction
     plt.title(title)
     plt.xlabel("Epoch")
     plt.ylabel("Error Count")
+    plt.show()
+    plt.close()
+
+
+def visualize_maze(maze: np.ndarray, start: tuple[int, int], goal: tuple[int, int]) -> None:
+    """
+    Visualizes the grid environment.
+
+    :param maze: Grid environment
+    :param start: Starting position
+    :param goal: Goal position
+    """
+    plt.figure(figsize=(6, 6))
+    plt.imshow(maze, cmap="gray", alpha=0.5)
+
+    plt.scatter(start[1], start[0], marker="o", color="green", label="Start")
+    plt.scatter(goal[1], goal[0], marker="X", color="red", label="Cheese 🧀")
+
+    plt.legend()
+    plt.title("Q-Learning Maze Environment")
     plt.show()

@@ -31,6 +31,26 @@ def generate_hopfield_patterns(num_patterns: int = 3, size: int = 10) -> np.ndar
 
     :param num_patterns: Number of patterns to generate.
     :param size: Size of each pattern (size x size grid).
-    :return: np.ndarray - Array of binary patterns (-1, 1).
+    :return: np.ndarray - Array of arrays of binary patterns (-1, 1).
     """
     return np.random.choice([-1, 1], size=(num_patterns, size * size))
+
+
+def generate_maze(grid_size: tuple[int, int] = (10, 10), num_obstacles: int = 3) -> tuple[np.ndarray, tuple[int, int], tuple[int, int]]:
+    """
+    Generates a simple maze environment with obstacles.
+
+    :param grid_size: Size of the grid (grid_size x grid_size).
+    :param num_obstacles: Number of obstacles in the maze.
+    :return: Tuple (grid, start, goal) where grid is the maze, start is the starting position, and goal is the goal position.
+    """
+    grid = np.zeros(grid_size)
+    start = (0, 0)
+    goal = (grid_size[0] - 1, grid_size[1] - 1)
+
+    # Add obstacles
+    for _ in range(num_obstacles):
+        x, y = np.random.randint(grid_size, size=2)
+        grid[x, y] = 1
+
+    return grid, start, goal
