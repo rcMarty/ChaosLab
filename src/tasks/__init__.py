@@ -2,10 +2,16 @@ from src.tasks.perceptron import Perceptron
 from src.tasks.simple_neural_network import MLP
 from src.tasks.hopfield_network import HopfieldNetwork
 from src.tasks.q_learn import QLearningAgent
+from src.tasks.l_system import LSystem
+from src.tasks.pole_balancing import PoleBalancing
+from src.tasks.iterated_function_systems import IFS
 
 __all__ = [
     "Perceptron",
     "MLP",
     "HopfieldNetwork",
     "QLearningAgent",
+    "LSystem",
+    "PoleBalancing",
+    "IFS",
 ]

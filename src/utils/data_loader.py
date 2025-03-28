@@ -54,3 +54,27 @@ def generate_maze(grid_size: tuple[int, int] = (10, 10), num_obstacles: int = 3)
         grid[x, y] = 1
 
     return grid, start, goal
+
+
+def generate_ifs_data(num_points: int = 1000) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Generates data for Iterated Function Systems (IFS).
+
+    :param num_points: Number of points to generate.
+    :return: Tuple (X, y) where X are inputs and y are labels.
+    """
+    # Define the IFS functions
+    functions = [
+        lambda x, y: (0.5 * x, 0.5 * y),
+        lambda x, y: (0.5 * x + 0.5, 0.5 * y),
+        lambda x, y: (0.5 * x + 1, 0.5 * y + 1),
+        lambda x, y: (0.5 * x + 1.5, 0.5 * y + 1)
+    ]
+
+    # Generate points
+    X = np.zeros((num_points, 2))
+    for i in range(num_points):
+        f = np.random.choice(functions)
+        X[i] = f(X[i - 1] if i > 0 else (0, 0))
+
+    return X

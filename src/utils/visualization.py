@@ -127,6 +127,37 @@ def plot_fractal(x: np.ndarray, y: np.ndarray, title: str = "Fractal"):
     plt.show()
 
 
+def plot_fractal_paths(paths: list[np.ndarray], title: str = "Fractal Structure", figsize: tuple[int, int] = (8, 8), save: bool = False) -> tuple[Figure, Axes]:
+    """
+    Draws a complex fractal structures from a list of paths.
+
+    :param paths: List of paths (each path is a numpy array of shape (n, 2))
+    :param title: Title of the plot
+    :param figsize: Size of the figure
+    :param save: If True, saves the plot to a file
+    :return: Tuple (Figure, Axes)
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+
+    line_color = "darkgreen"
+    line_width = 0.5
+
+    for path_fractal in paths:
+        ax.plot(path_fractal[:, 0], path_fractal[:, 1],
+                color=line_color,
+                linewidth=line_width,
+                solid_capstyle='round')
+
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.set_title(title)
+
+    if save:
+        save_plot(fig, title.replace(" ", "_"))
+
+    return fig, ax
+
+
 def animate_learning(error_history: list[numbers], title: str = "Error Reduction Over Time", animate_time: float = 1) -> None:
     """
     Animates the training error over time.

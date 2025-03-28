@@ -5,21 +5,6 @@ from src.utils.neural_helpers import Runnable
 def main():
     try:
         while True:
-            print("\n🚀 Select task:")
-            print(" 1 - Perceptron")
-            print(" 2 - XOR neuron network")
-            print(" 3 - Hopfield network")
-            print(" 4 - Q-learning (Find the Cheese)")
-            print(" 5 - Fractal L-systems")
-            print(" 6 - Fractal geometrics (IFS)")
-            print(" 7 - Mandelbrot Set")
-            print(" 8 - Logistics Chaos")
-            print(" 9 - Double Pendulum")
-            print("10 - Cellular Automata")
-            print(" 0 - Exit")
-
-            choice = input("Enter your choice: ")
-
             scripts: dict[str, type[Runnable]] = {}
 
             def add_runnable_class(name: str, cls: type[Runnable]):
@@ -31,12 +16,21 @@ def main():
             add_runnable_class("2", MLP)
             add_runnable_class("3", HopfieldNetwork)
             add_runnable_class("4", QLearningAgent)
-            # add_runnable_class("5": LSystems)
-            # add_runnable_class("6": IFS)
-            # add_runnable_class("7": MandelbrotSet)
-            # add_runnable_class("8": LogisticsChaos)
-            # add_runnable_class("9": DoublePendulum)
-            # add_runnable_class("10":CellularAutomata)
+            # add_runnable_class("5": PoleBalancing)
+            add_runnable_class("6", LSystem)
+            # add_runnable_class("7": IFS)
+            # add_runnable_class("8": MandelbrotSet)
+            # add_runnable_class("9": LogisticsChaos)
+            # add_runnable_class("10": LogisticsChaos)
+            # add_runnable_class("11": DoublePendulum)
+            # add_runnable_class("12":CellularAutomata)
+
+            print("\n🚀 Select task:")
+            for name, cls in scripts.items():
+                print(f" {name} - {cls.__doc__.strip()}")
+            print(" 0 - Exit")
+
+            choice = input("Enter your choice: ")
 
             if choice == "0":
                 print("Exiting program ...")

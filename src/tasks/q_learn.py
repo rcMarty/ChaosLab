@@ -70,18 +70,19 @@ class QLearningAgent(Runnable):
             y = min(self.grid_size[1] - 1, y + 1)
 
         new_state = (x, y)
+        reward = -1 * (abs(x - self.goal[0]) + abs(y - self.goal[1]))  # Penalizing longer paths
         # Define rewards
         if new_state == self.goal:
-            reward = 100  # Big reward for finding the cheese
-        else:
-            reward = -1 * (abs(x - self.goal[0]) + abs(y - self.goal[1]))  # Penalizing longer paths
+            reward = 10000
+        elif self.maze[x, y] == 1:
+            reward = -10000
 
         return new_state, reward
 
     @staticmethod
     def run():
 
-        agent = QLearningAgent(grid_size=(10, 10))
+        agent = QLearningAgent(grid_size=(10, 10), episodes=1000)
 
         visualize_grid(agent.maze, title="q-Learning Maze", save=True)
         visualize_maze(agent.maze, agent.start, agent.goal)
