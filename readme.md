@@ -1,4 +1,4 @@
-# 🧠 NeuroChaos – Neural Networks, Fractals, and Chaos
+# 🧠 ChaosLab – Neural Networks, Fractals, and Chaos
 
 📌 **All in One Project** for experimenting with **neural networks, fractal geometry, cellular automata, and chaotic systems**. This project is part of the **Unconventional Algorithms and Computation** course at VŠB-TU Ostrava.
 
@@ -30,8 +30,8 @@
 Clone the repository and install the required libraries:
 
 ```bash
-git clone https://github.com/your-repo/NeuroChaos.git
-cd NeuroChaos
+git clone https://github.com/rcMarty/ChaosLab.git
+cd ChaosLab
 pip install -r requirements.txt
 ```
 
@@ -40,18 +40,10 @@ pip install -r requirements.txt
 Run main.py to select and execute a task:
 
 ```bash
-python src/main.py
+python main.py
 ```
 
 📌 This menu allows you to select tasks easily without modifying the code.
-
-### 3️⃣ Run Individual Tasks
-
-If you want to run a specific task manually:
-
-```bash
-python src/tasks/perceptron.py
-```
 
 # 🖼 Visual Outputs
 
@@ -66,7 +58,7 @@ All visualizations are implemented in src/utils/visualization.py and can be reus
 
 # 📚 Technologies Used
 
-- Python 3.9+
+- Python 3.10+
 - NumPy – Numerical computing
 - Matplotlib – Data visualization
 - TensorFlow / PyTorch – Neural network training
