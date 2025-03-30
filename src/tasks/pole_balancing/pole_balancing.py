@@ -5,6 +5,7 @@ from collections import defaultdict
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
+from src.tasks import QLearningPoleAgent
 from src.utils.neural_helpers import Runnable
 
 
@@ -35,7 +36,7 @@ class PoleBalancing(Runnable):
 
     def __init__(self):
         self.env = gym.make('CartPole-v1')
-        self.agent = QLearningAgent(self.env)
+        self.agent = QLearningPoleAgent(self.env)
         self.nn = BalanceNetwork(input_size=4, output_size=self.env.action_space.n)
 
     def _generate_training_data(self, samples=10000):

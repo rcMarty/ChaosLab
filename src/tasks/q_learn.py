@@ -9,7 +9,16 @@ from src.utils.visualization import visualize_grid, animate_learning, save_plot,
 class QLearningAgent(Runnable):
     """Q-learning agent solving a grid-based maze to find the cheese."""
 
-    def __init__(self, grid_size: tuple[int, int] = (5, 5), alpha: float = 0.1, gamma: float = 0.9, epsilon: float = 0.1, episodes: int = 500):
+    def __init__(self, grid_size: tuple[int, int] = (5, 5), alpha: float = 0.1, gamma: float = 0.9, epsilon: float = 0.1, episodes: int = 500, obstacles: int = 5):
+        """
+        Initialize Q-learning agent parameters.
+        :param grid_size: a tuple(int, int) - size of the grid
+        :param alpha: learning rate
+        :param gamma: discount factor
+        :param epsilon: exploration rate
+        :param episodes: number of training episodes
+        :param obstacles: number of obstacles in the maze
+        """
         self.grid_size = grid_size
         self.alpha = alpha  # Learning rate
         self.gamma = gamma  # Discount factor
@@ -17,7 +26,7 @@ class QLearningAgent(Runnable):
         self.episodes = episodes
         self.actions = ["up", "down", "left", "right"]
         self.q_table = np.zeros((*grid_size, len(self.actions)))  # Initialize Q-table
-        self.maze, self.start, self.goal = generate_maze(grid_size, num_obstacles=5)
+        self.maze, self.start, self.goal = generate_maze(grid_size, num_obstacles=obstacles)
 
     def choose_action(self, state):
         """Choose action using epsilon-greedy policy."""
@@ -79,12 +88,39 @@ class QLearningAgent(Runnable):
 
         return new_state, reward
 
+    def show_path(self):
+        """
+        Show the best path found by the Q-learning agent.
+        This function visualizes the best path on the maze grid.
+        :return:
+        """
+        # print best path
+        path = []
+        state = self.start
+        while state != self.goal:
+            action = np.argmax(self.q_table[state])
+            path.append(state)
+            state, _ = self.step(state, action)
+        path.append(self.goal)
+        print("Best path found by Q-learning agent:", path)
+        # Visualize the best path
+        fig, ax = plt.subplots(figsize=(11, 11))
+        ax.imshow(self.maze, cmap="gray", alpha=0.5)
+        path = np.array(path)
+        ax.plot(path[:, 1], path[:, 0], marker="o", color="blue", label="Best Path")
+        ax.scatter(self.start[1], self.start[0], marker="o", color="green", label="Start")
+        ax.scatter(self.goal[1], self.goal[0], marker="X", color="red", label="Cheese 🧀")
+        ax.legend()
+        plt.title("Best Path Found by Q-Learning Agent")
+        save_plot(fig, "q_best_path.png")
+        plt.show()
+
     @staticmethod
     def run():
 
-        agent = QLearningAgent(grid_size=(10, 10), episodes=1000)
+        agent = QLearningAgent(grid_size=(10, 10), episodes=500, obstacles=10)
 
-        visualize_grid(agent.maze, title="q-Learning Maze", save=True)
+        visualize_grid(agent.maze, title="q_Learning Maze", save=True)
         visualize_maze(agent.maze, agent.start, agent.goal)
 
         # Train the Q-learning agent and track learning progress
@@ -95,7 +131,9 @@ class QLearningAgent(Runnable):
         # Save Q-table as a heatmap
         fig, ax = plt.subplots(figsize=(11, 11))
         ax.imshow(np.max(agent.q_table, axis=2), cmap="coolwarm")
-        # plt.colorbar(label="Max Q-Value")
         plt.title("Final Q-Table Heatmap")
         save_plot(fig, "q_table.png")
         plt.show()
+
+        # Show the best path found by the Q-learning agent
+        agent.show_path()

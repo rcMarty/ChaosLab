@@ -19,7 +19,13 @@ class Perceptron(Plot2DBoundary, Runnable):
         self.bias = 0
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> list[float]:
-        """Train perceptron using input data X and labels y."""
+        """
+        Train perceptron using input data X and labels y.
+
+        :param X: Input data, shape (n_samples, n_features)
+        :param y: Labels, shape (n_samples,)
+        :return: List of errors during training in each epoch
+        """
         n_samples, n_features = X.shape
         self.weights = np.zeros(n_features)
         self.bias = 0
@@ -42,6 +48,7 @@ class Perceptron(Plot2DBoundary, Runnable):
 
             errors.append(total_error / n_samples)
 
+            # Print accuracy every 100 epochs
             if epoch % 100 == 0 or epoch == self.epochs - 1:
                 accuracy = correct_predictions / n_samples
                 print(f"Epoch {epoch}: Accuracy = {accuracy * 100:.2f}%")
