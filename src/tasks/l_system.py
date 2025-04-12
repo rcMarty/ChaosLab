@@ -89,7 +89,10 @@ class LSystem(Runnable):
              {"title": "Fraktální Strom", "save": True}),
 
             (LSystem(axiom="F--F--F", rules={"F": "F+F--F+F"}, angle=60, iterations=4),
-             {"title": "Sierpińského Trojúhelník", "save": True})
+             {"title": "Sierpińského Trojúhelník", "save": True}),
+
+            (LSystem(axiom="F", rules={"F": "FF+[+F-F-F]-[-F+F+F]"}, angle=22.5, iterations=4),
+             {"title": "Pythagorova Strom", "save": True}),
         ]
 
         for system, params in systems:

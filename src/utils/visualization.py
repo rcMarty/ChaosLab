@@ -113,17 +113,20 @@ def plot_3d_fractal(x: np.ndarray, y: np.ndarray, z: np.ndarray, title: str = "F
     plt.show()
 
 
-def plot_fractal(x: np.ndarray, y: np.ndarray, title: str = "Fractal"):
+def plot_fractal(x: np.ndarray, y: np.ndarray, title: str = "Fractal", save: bool = False) -> None:
     """
     Plots a fractal pattern.
 
     :param x: numpy array - X coordinates
     :param y: numpy array - Y coordinates
     :param title: str - title of the graph
+    :param save: bool - if True, saves the plot to a file
     """
     plt.figure(figsize=(8, 8))
     plt.scatter(x, y, s=0.1, color="black")
     plt.title(title)
+    if save:
+        plt.savefig(f"{path}{title}.png")
     plt.show()
 
 
@@ -156,6 +159,32 @@ def plot_fractal_paths(paths: list[np.ndarray], title: str = "Fractal Structure"
         save_plot(fig, title.replace(" ", "_"))
 
     return fig, ax
+
+
+def animate_fractal_generation(x: np.ndarray, y: np.ndarray, title: str = "Fractal Animation", animate_time: float = 1) -> None:
+    """
+    Animates the generation of a fractal over time.
+
+    :param x: numpy array - X coordinates
+    :param y: numpy array - Y coordinates
+    :param title: str - title of the animation
+    :param animate_time: float - delay between frames in milliseconds
+    """
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.set_xlim(min(x), max(x))
+    ax.set_ylim(min(y), max(y))
+    ax.set_title(title)
+    ax.set_aspect("equal")
+
+    scatter = ax.scatter([], [], s=0.1, color="black")
+
+    def update(frame):
+        scatter.set_offsets(np.column_stack((x[:frame], y[:frame])))
+        return scatter,
+
+    ani = animation.FuncAnimation(fig, update, frames=len(x), interval=animate_time, blit=True)
+    plt.show()
+    plt.close()
 
 
 def animate_learning(error_history: list[numbers], title: str = "Error Reduction Over Time", animate_time: float = 1) -> None:
