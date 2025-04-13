@@ -83,16 +83,16 @@ class LSystem(Runnable):
         # Příklady různých fraktálů
         systems = [
             (LSystem(axiom="F", rules={"F": "F+F-F-F+F"}, angle=90, iterations=3),
-             {"title": "Kochova Křivka", "save": True}),
+             {"title": "l_sys Pythagors tree", "save": True}),
 
             (LSystem(axiom="X", rules={"X": "F+[[X]-X]-F[-FX]+X", "F": "FF"}, angle=25, iterations=5),
-             {"title": "Fraktální Strom", "save": True}),
-
-            (LSystem(axiom="F--F--F", rules={"F": "F+F--F+F"}, angle=60, iterations=4),
-             {"title": "Sierpińského Trojúhelník", "save": True}),
+             {"title": "l_sys Fractal complex rules tree", "save": True}),
 
             (LSystem(axiom="F", rules={"F": "FF+[+F-F-F]-[-F+F+F]"}, angle=22.5, iterations=4),
-             {"title": "Pythagorova Strom", "save": True}),
+             {"title": "l_sys Fractal simple rules tree", "save": True}),
+
+            (LSystem(axiom="F--F--F", rules={"F": "F+F--F+F"}, angle=60, iterations=5),
+             {"title": "l_sys Koch snowflake", "save": True}),
         ]
 
         for system, params in systems:
