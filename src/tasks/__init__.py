@@ -6,6 +6,8 @@ from src.tasks.pole_balancing.q_learnPole import QLearningPoleAgent
 from src.tasks.l_system import LSystem
 from src.tasks.pole_balancing.pole_balancing import PoleBalancing
 from src.tasks.iterated_function_systems import IFS
+from src.tasks.mandelbrot_set import MandelbrotSet
+from src.tasks.fractal_landscape import FractalTerrain
 
 __all__ = [
     "Perceptron",
@@ -16,5 +18,6 @@ __all__ = [
     # "QLearningPoleAgent",
     # "PoleBalancing",
     "IFS",
-
+    "MandelbrotSet",
+    "FractalTerrain",
 ]

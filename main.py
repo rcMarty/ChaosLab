@@ -16,14 +16,14 @@ def main():
             add_runnable_class("2", MLP)
             add_runnable_class("3", HopfieldNetwork)
             add_runnable_class("4", QLearningAgent)
-            # add_runnable_class("5": PoleBalancing)
+            # add_runnable_class("5": PoleBalancing) # optional
             add_runnable_class("6", LSystem)
             add_runnable_class("7", IFS)
-            # add_runnable_class("8": MandelbrotSet)
-            # add_runnable_class("9": LogisticsChaos)
-            # add_runnable_class("10": LogisticsChaos)
-            # add_runnable_class("11": DoublePendulum)
-            # add_runnable_class("12":CellularAutomata)
+            add_runnable_class("8", MandelbrotSet)
+            add_runnable_class("9", FractalTerrain)
+            # add_runnable_class("10", LogisticsChaos)
+            # add_runnable_class("11", DoublePendulum) # optional
+            # add_runnable_class("12", CellularAutomata)
 
             print("\n🚀 Select task:")
             for name, cls in scripts.items():
