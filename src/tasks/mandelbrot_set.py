@@ -58,7 +58,7 @@ class MandelbrotSet(Runnable):
         plt.imshow(fractal, cmap="inferno", extent=(-2, 2, -2, 2))
         plt.colorbar(label="Number of iterations")
         plt.title("Mandelbrot Set")
-        save_plot(plt.gcf(), "mandelbrot_set")
+        save_plot(plt.gcf(), "tea_mandelbrot_set")
         plt.show()
 
         fractal = model.generate_fractal("julia")
@@ -66,5 +66,5 @@ class MandelbrotSet(Runnable):
         plt.imshow(fractal, cmap="plasma", extent=(-1.5, 1.5, -1.5, 1.5))
         plt.colorbar(label="Number of iterations")
         plt.title("Julia Set")
-        save_plot(plt.gcf(), "julia_set")
+        save_plot(plt.gcf(), "tea_julia_set")
         plt.show()

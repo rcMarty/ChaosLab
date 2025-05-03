@@ -8,6 +8,8 @@ from src.tasks.pole_balancing.pole_balancing import PoleBalancing
 from src.tasks.iterated_function_systems import IFS
 from src.tasks.mandelbrot_set import MandelbrotSet
 from src.tasks.fractal_landscape import FractalTerrain
+from src.tasks.logistics_map import LogisticChaos
+from src.tasks.forest_fire import ForestFireCA
 
 __all__ = [
     "Perceptron",
@@ -20,4 +22,6 @@ __all__ = [
     "IFS",
     "MandelbrotSet",
     "FractalTerrain",
+    "LogisticChaos",
+    "ForestFireCA",
 ]

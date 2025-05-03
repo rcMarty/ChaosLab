@@ -21,9 +21,9 @@ def main():
             add_runnable_class("7", IFS)
             add_runnable_class("8", MandelbrotSet)
             add_runnable_class("9", FractalTerrain)
-            # add_runnable_class("10", LogisticsChaos)
+            add_runnable_class("10", LogisticChaos)
             # add_runnable_class("11", DoublePendulum) # optional
-            # add_runnable_class("12", CellularAutomata)
+            add_runnable_class("12", ForestFireCA)
 
             print("\n🚀 Select task:")
             for name, cls in scripts.items():
