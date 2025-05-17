@@ -58,7 +58,7 @@ class DQNAgent(Runnable):
             self.epsilon *= self.epsilon_decay
 
     @staticmethod
-    def run(episodes=500):
+    def train_cartpole(episodes=300):
         env = gym.make('CartPole-v1')
         state_size = env.observation_space.shape[0]
         action_size = env.action_space.n
@@ -90,5 +90,32 @@ class DQNAgent(Runnable):
         plt.xlabel('Episode')
         plt.ylabel('Reward')
         plt.title('CartPole-v1 using DQN (Gymnasium 1.1.1)')
-        plt.savefig('results/cartpole.png')
+        plt.savefig('results/cartpole_train.png')
         plt.show()
+
+        return agent
+
+    @staticmethod
+    def visualize_agent(agent, episodes=5):
+        env = gym.make('CartPole-v1', render_mode="human")
+        state_size = env.observation_space.shape[0]
+
+        for ep in range(episodes):
+            state, _ = env.reset()
+            state = np.reshape(state, [1, state_size])
+            total_reward = 0
+            done = False
+            while not done:
+                env.render()
+                action = agent.act(state)
+                next_state, reward, terminated, truncated, _ = env.step(action)
+                done = terminated or truncated
+                total_reward += reward
+                state = np.reshape(next_state, [1, state_size])
+            print(f"Visualization Episode {ep + 1}: Score = {total_reward}")
+        env.close()
+
+    @staticmethod
+    def run(episodes=500):
+        trained_agent = DQNAgent.train_cartpole()
+        DQNAgent.visualize_agent(trained_agent, episodes=30)

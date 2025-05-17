@@ -9,6 +9,10 @@ matplotlib.use('TkAgg')
 
 
 class DoublePendulum(Runnable):
+    """
+    Class representing a double pendulum system.
+    """
+
     def __init__(self, ax, l1=1, l2=1, m1=1, m2=1, theta1=np.pi / 2, theta2=np.pi / 2,
                  color='blue', theta1_dot=0, theta2_dot=0, g=9.81):
         self.ax = ax

@@ -9,6 +9,7 @@ from src.tasks.mandelbrot_set import MandelbrotSet
 from src.tasks.fractal_landscape import FractalTerrain
 from src.tasks.logistics_map import LogisticChaos
 from src.tasks.forest_fire import ForestFireCA
+from src.tasks.DoublePendulum.pendulum import DoublePendulum
 
 __all__ = [
     "Perceptron",
@@ -21,5 +22,6 @@ __all__ = [
     "MandelbrotSet",
     "FractalTerrain",
     "LogisticChaos",
+    "DoublePendulum",
     "ForestFireCA",
 ]
