@@ -90,4 +90,5 @@ class DQNAgent(Runnable):
         plt.xlabel('Episode')
         plt.ylabel('Reward')
         plt.title('CartPole-v1 using DQN (Gymnasium 1.1.1)')
+        plt.savefig('results/cartpole.png')
         plt.show()
