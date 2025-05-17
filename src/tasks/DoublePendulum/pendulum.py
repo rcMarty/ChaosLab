@@ -13,8 +13,22 @@ class DoublePendulum(Runnable):
     Class representing a double pendulum system.
     """
 
-    def __init__(self, ax, l1=1, l2=1, m1=1, m2=1, theta1=np.pi / 2, theta2=np.pi / 2,
-                 color='blue', theta1_dot=0, theta2_dot=0, g=9.81):
+    def __init__(self, ax, l1: float = 1, l2: float = 1, m1: float = 1, m2: float = 1, theta1: float = np.pi / 2, theta2: float = np.pi / 2,
+                 color='blue', theta1_dot: float = 0, theta2_dot: float = 0, g: float = 9.81):
+        """
+        Initialize the double pendulum with given parameters.
+        :param ax : Matplotlib axis to draw the pendulum on
+        :param l1 : Length of the first pendulum
+        :param l2 : Length of the second pendulum
+        :param m1 : Mass of the first pendulum
+        :param m2 : Mass of the second pendulum
+        :param theta1 : Initial angle of the first pendulum (in radians)
+        :param theta2 : Initial angle of the second pendulum (in radians)
+        :param color : Color of the pendulum
+        :param theta1_dot : Initial angular velocity of the first pendulum
+        :param theta2_dot : Initial angular velocity of the second pendulum
+        :param g : Gravitational acceleration
+        """
         self.ax = ax
         self.l1, self.l2 = l1, l2
         self.m1, self.m2 = m1, m2
@@ -119,9 +133,9 @@ class DoublePendulum(Runnable):
         ax.grid(True)
 
         pendulums = [
-            DoublePendulum(ax, theta1=np.pi / 1.5 + 0.3, color='red'),
-            DoublePendulum(ax, theta1=np.pi / 2 - 0.2, color='blue', m1=1.5),
-            DoublePendulum(ax, l1=0.8, l2=1.2, color='green', theta2=np.pi / 2 + 0.15)
+            DoublePendulum(ax, color='red', theta1=np.pi / 2 + 0.2, theta2=np.pi / 2 - 0.15, m1=2, m2=7),
+            DoublePendulum(ax, theta1=np.pi / 2 - 0.2, color='blue', m1=15),
+            DoublePendulum(ax, l1=0.6, l2=2, color='green', theta2=np.pi / 2 + 0.15)
         ]
 
         dt = 0.033

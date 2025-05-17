@@ -1,13 +1,18 @@
 import gymnasium as gym
+import matplotlib
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import deque
 import random
+
+from matplotlib import animation
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.optimizers import Adam
 
 from src.utils.neural_helpers import Runnable
+
+matplotlib.use('TkAgg')
 
 
 class DQNAgent(Runnable):
@@ -16,6 +21,11 @@ class DQNAgent(Runnable):
     """
 
     def __init__(self, state_size, action_size):
+        """
+        Initialize the DQN agent with the given state and action sizes.
+        :param state_size : Size of the state space.
+        :param action_size : Size of the action space.
+        """
         self.state_size = state_size
         self.action_size = action_size
         self.memory = deque(maxlen=2000)
@@ -96,8 +106,8 @@ class DQNAgent(Runnable):
         return agent
 
     @staticmethod
-    def visualize_agent(agent, episodes=5):
-        env = gym.make('CartPole-v1', render_mode="human")
+    def visualize_agent(agent, episodes=1):
+        env = gym.make('CartPole-v1', render_mode="rgb_array")
         state_size = env.observation_space.shape[0]
 
         for ep in range(episodes):
@@ -105,14 +115,28 @@ class DQNAgent(Runnable):
             state = np.reshape(state, [1, state_size])
             total_reward = 0
             done = False
+            frames = []
+
             while not done:
-                env.render()
+                frame = env.render()  # returns RGB array
+                frames.append(frame)
+
                 action = agent.act(state)
                 next_state, reward, terminated, truncated, _ = env.step(action)
                 done = terminated or truncated
                 total_reward += reward
                 state = np.reshape(next_state, [1, state_size])
+
             print(f"Visualization Episode {ep + 1}: Score = {total_reward}")
+
+            # Save GIF
+            fig = plt.figure()
+            plt.axis('off')
+            ims = [[plt.imshow(f, animated=True)] for f in frames]
+            ani = animation.ArtistAnimation(fig, ims, interval=50, blit=True)
+            ani.save(f"results/cartpole_episode_{ep + 1}.gif", writer="pillow", fps=20)
+            plt.close(fig)
+
         env.close()
 
     @staticmethod
