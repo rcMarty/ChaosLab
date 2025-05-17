@@ -1,96 +1,93 @@
-import gym
+import gymnasium as gym
 import numpy as np
 import matplotlib.pyplot as plt
-from collections import defaultdict
+from collections import deque
+import random
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense, Input
+from tensorflow.keras.optimizers import Adam
 
-from src.tasks import QLearningPoleAgent
 from src.utils.neural_helpers import Runnable
 
 
-# 1. Příprava prostředí
-class BalanceNetwork:
-    """Neuronová síť pro řízení vozíku."""
+class DQNAgent(Runnable):
+    """
+    Deep Q-Learning agent for the CartPole balancing task.
+    """
 
-    def __init__(self, input_size, output_size):
-        self.model = self._build_model(input_size, output_size)
+    def __init__(self, state_size, action_size):
+        self.state_size = state_size
+        self.action_size = action_size
+        self.memory = deque(maxlen=2000)
+        self.gamma = 0.95
+        self.epsilon = 1.0
+        self.epsilon_min = 0.01
+        self.epsilon_decay = 0.995
+        self.learning_rate = 0.001
+        self.model = self._build_model()
 
-    def _build_model(self, input_size, output_size):
-        """Vytvoří architekturu neuronové sítě."""
+    def _build_model(self):
         model = Sequential([
-            Dense(24, activation='relu', input_shape=(input_size,)),
+            Input(shape=(self.state_size,)),
             Dense(24, activation='relu'),
-            Dense(output_size, activation='linear')
+            Dense(24, activation='relu'),
+            Dense(self.action_size, activation='linear')
         ])
-        model.compile(optimizer='adam', loss='mse')
+        model.compile(loss='mse', optimizer=Adam(learning_rate=self.learning_rate))
         return model
 
-    def train(self, X, y, epochs=20):
-        """Provede trénink sítě na vygenerovaných datech."""
-        self.model.fit(X, y, epochs=epochs, batch_size=32, verbose=1)
+    def remember(self, state, action, reward, next_state, done):
+        self.memory.append((state, action, reward, next_state, done))
 
+    def act(self, state):
+        if np.random.rand() <= self.epsilon:
+            return random.randrange(self.action_size)
+        act_values = self.model.predict(state, verbose=0)
+        return np.argmax(act_values[0])
 
-class PoleBalancing(Runnable):
-    """Hlavní třída řešící problém balancování tyče."""
-
-    def __init__(self):
-        self.env = gym.make('CartPole-v1')
-        self.agent = QLearningPoleAgent(self.env)
-        self.nn = BalanceNetwork(input_size=4, output_size=self.env.action_space.n)
-
-    def _generate_training_data(self, samples=10000):
-        """Vygeneruje trénovací data z Q-tabulky."""
-        X, y = [], []
-        for _ in range(samples):
-            state = self.agent.discretize_state(self.env.observation_space.sample())
-            action = np.argmax(self.agent.q_table[state])
-            X.append(state)
-            y.append(action)
-        return np.array(X), np.array(y)
-
-    def _visualize_training(self, rewards):
-        """Vykreslí průběh učení."""
-        plt.figure(figsize=(10, 6))
-        plt.plot(rewards)
-        plt.title("Vývoj odměn během tréninku Q-learning")
-        plt.xlabel("Epizoda")
-        plt.ylabel("Celková odměna")
-        plt.show()
-
-    def _visualize_solution(self):
-        """Animuje finální řešení pomocí neuronové sítě."""
-        for _ in range(3):  # 3 demonstrační epizody
-            obs, _ = self.env.reset()  # Získání pouze pozorování
-            state = obs
-            total_reward = 0
-
-            while True:
-                self.env.render()
-                state_disc = self.agent.discretize_state(state)
-                action = np.argmax(self.nn.model.predict(np.array([state_disc]), verbose=0))
-                obs, reward, done, _, _ = self.env.step(action)
-                state = obs
-                total_reward += reward
-
-                if done:
-                    print(f"Epizoda ukončena s celkovým skóre: {total_reward}")
-                    break
-
-        self.env.close()
+    def replay(self, batch_size):
+        minibatch = random.sample(self.memory, batch_size)
+        for state, action, reward, next_state, done in minibatch:
+            target = reward
+            if not done:
+                target = reward + self.gamma * np.amax(self.model.predict(next_state, verbose=0)[0])
+            target_f = self.model.predict(state, verbose=0)
+            target_f[0][action] = target
+            self.model.fit(state, target_f, epochs=1, verbose=0)
+        if self.epsilon > self.epsilon_min:
+            self.epsilon *= self.epsilon_decay
 
     @staticmethod
-    def run():
-        """Hlavní metoda pro spuštění celého pipeline."""
-        task = PoleBalancing()
+    def run(episodes=500):
+        env = gym.make('CartPole-v1')
+        state_size = env.observation_space.shape[0]
+        action_size = env.action_space.n
+        agent = DQNAgent(state_size, action_size)
+        batch_size = 32
+        rewards = []
 
-        # Fáze 1: Trénink Q-learning agenta
-        rewards = task.agent.train(episodes=3000)
-        task._visualize_training(rewards)
+        for e in range(episodes):
+            state, _ = env.reset()
+            state = np.reshape(state, [1, state_size])
+            total_reward = 0
+            for time in range(500):
+                action = agent.act(state)
+                next_state, reward, terminated, truncated, _ = env.step(action)
+                done = terminated or truncated
+                total_reward += reward
+                next_state = np.reshape(next_state, [1, state_size])
+                agent.remember(state, action, reward, next_state, done)
+                state = next_state
+                if done:
+                    print(f"Episode {e + 1}/{episodes} - Score: {total_reward}, Epsilon: {agent.epsilon:.2f}")
+                    break
+            rewards.append(total_reward)
+            if len(agent.memory) > batch_size:
+                agent.replay(batch_size)
 
-        # Fáze 2: Trénink neuronové sítě
-        X, y = task._generate_training_data()
-        task.nn.train(X, y)
-
-        # Fáze 3: Vizualizace výsledků
-        task._visualize_solution()
+        # Plot the reward progress
+        plt.plot(rewards)
+        plt.xlabel('Episode')
+        plt.ylabel('Reward')
+        plt.title('CartPole-v1 using DQN (Gymnasium 1.1.1)')
+        plt.show()
